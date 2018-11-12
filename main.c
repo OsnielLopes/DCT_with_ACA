@@ -77,6 +77,7 @@ int didConverge(int *config, gene chromossome[]) {
 //        }
 //    }
     
+    //FIXME: The final density must be computed only if the automaton converge
     amountOfZero = 0;
     amountOfOne = 0;
     for (i = 0; i < CONFIG_SIZE; i++)
