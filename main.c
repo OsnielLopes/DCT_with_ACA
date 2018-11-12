@@ -62,7 +62,7 @@ int didConverge(int *config, gene chromossome[]) {
     
     int amountOfZero = 0, amountOfOne = 0;
     for (i = 0; i < CONFIG_SIZE; i++)
-        if (config+i == 0) amountOfZero++;
+        if (config+i == 0) amountOfZero++; //FIXME
         else amountOfOne++;
     int initialDensity = (amountOfZero > amountOfOne) ? 0 : 1;
     
@@ -77,11 +77,10 @@ int didConverge(int *config, gene chromossome[]) {
 //        }
 //    }
     
-    //FIXME: The final density must be computed only if the automaton converge
     amountOfZero = 0;
     amountOfOne = 0;
     for (i = 0; i < CONFIG_SIZE; i++)
-        if (i == 0) amountOfZero++;
+        if (i == 0) amountOfZero++; //FIXME
         else amountOfOne++;
     
     if (amountOfOne == CONFIG_SIZE) return initialDensity == 1;
