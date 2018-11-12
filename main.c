@@ -58,11 +58,11 @@ void quicksort(gene chromossome[], int l, int r) {
 
 int didConverge(int *config, gene chromossome[]) {
     
-    int i=0;
+    int i = 0;
     
     int amountOfZero = 0, amountOfOne = 0;
     for (i = 0; i < CONFIG_SIZE; i++)
-        if (i == 0) amountOfZero++;
+        if (config+i == 0) amountOfZero++;
         else amountOfOne++;
     int initialDensity = (amountOfZero > amountOfOne) ? 0 : 1;
     
@@ -83,8 +83,10 @@ int didConverge(int *config, gene chromossome[]) {
     for (i = 0; i < CONFIG_SIZE; i++)
         if (i == 0) amountOfZero++;
         else amountOfOne++;
-    int finalDensity = (amountOfZero > amountOfOne) ? 0 : 1;
-    return finalDensity == initialDensity;
+    
+    if (amountOfOne == CONFIG_SIZE) return initialDensity == 1;
+    else if (amountOfZero == CONFIG_SIZE) return initialDensity == 0;
+    return 0;
 }
 
 int main(int argc, char *argv[]) {
