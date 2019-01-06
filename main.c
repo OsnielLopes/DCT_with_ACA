@@ -1,23 +1,9 @@
 #include <stdio.h> //defines input and output
 #include <string.h> //basic functions of the system
 #include <stdlib.h> //functions envolving memory alocation
-
-#define NUMBER_OF_NEIGHBOURS 2
-#define DELTA_T 200
-
-#define CONFIG_SIZE 5
-#define POPULATION_SIZE 1
-#define AMOUNT_OF_CONFIGS_TO_TEST 1
-
-typedef struct gene {
-    int priority;
-    int position;
-} gene;
-
-typedef struct species {
-    int update[CONFIG_SIZE];
-    float fitness;
-} species;
+#include <time.h>
+#include "quickSort.h"
+#include "aca.h"
 
 // Function to print a chromossome
 void print(gene arr[], int size) {
@@ -29,80 +15,47 @@ void print(gene arr[], int size) {
     printf("]\n");
 }
 
-// Function to swap two pointers
-void swap(gene *a, gene *b) {
-    gene temp = *a;
-    *a = *b;
-    *b = temp;
-}
-
-// Function to run quicksort
-// l is the leftmost starting index, which begins at 0
-// r is the rightmost starting index, which begins at array length - 1
-void quicksort(gene chromossome[], int l, int r) {
+void selection(species population[]){
     
-    if (l >= r) return;
-
-    int pivot = chromossome[r].priority;
-    int slipt = l;
+    srand(time(NULL));
     
-    for (int i = l; i <= r; i++)
-        if (chromossome[i].priority <= pivot) {
-            swap(&chromossome[slipt], &chromossome[i]);
-            slipt++;
+    float totalFitness = 0.0;
+    int i;
+    for (i = 0; i<POPULATION_SIZE; i++) totalFitness += population[i].fitness;
+    
+    species aux [POPULATION_SIZE];
+    for (i = 0; i<POPULATION_SIZE; i++) {
+        float randomFitness = totalFitness*(float)rand()/(float)RAND_MAX;
+        int selectedIndex = 0;
+        float deltaFitness = population[selectedIndex].fitness;
+        while (randomFitness > deltaFitness) {
+            selectedIndex++;
+            deltaFitness += population[selectedIndex].fitness;
         }
-    
-    quicksort(chromossome, l, slipt-2);
-    quicksort(chromossome, slipt, r);
-}
-
-int didConverge(int *config, gene chromossome[]) {
-    
-    int i = 0;
-    
-    int amountOfZero = 0, amountOfOne = 0;
-    for (i = 0; i < CONFIG_SIZE; i++)
-        if (config+i == 0) amountOfZero++; //FIXME
-        else amountOfOne++;
-    int initialDensity = (amountOfZero > amountOfOne) ? 0 : 1;
-    
-    //TODO: asynchronous cellular automata update
-//    for (i = 0; i<t; i++) { //iterates t times
-//        int j;
-//        for (j = 0; j<sizeof(update+j); j++) { //iterates over each subupdate
-//            *int placeholderConfig = (int *) malloc(CONFIG_SIZE * sizeof(int));
-//            int k;
-//            for (k = 0; k < sizeof(update+j); k++) { //iterates over each index in subupdate
-//            }
-//        }
-//    }
-    
-    amountOfZero = 0;
-    amountOfOne = 0;
-    for (i = 0; i < CONFIG_SIZE; i++)
-        if (i == 0) amountOfZero++; //FIXME
-        else amountOfOne++;
-    
-    if (amountOfOne == CONFIG_SIZE) return initialDensity == 1;
-    else if (amountOfZero == CONFIG_SIZE) return initialDensity == 0;
-    return 0;
+        aux[i].fitness = population[selectedIndex].fitness;
+        int j;
+        for (j=0; j<CONFIG_SIZE; j++) aux[i].update[j] = population[selectedIndex].update[j];
+    }
 }
 
 int main(int argc, char *argv[]) {
     
-    species population[POPULATION_SIZE];
-    population[0].update[0] = 0;
-    population[0].update[0] = 1;
-    population[0].update[0] = 0;
-    population[0].update[0] = 1;
-    population[0].update[0] = 0;
-    
-    int configurations [AMOUNT_OF_CONFIGS_TO_TEST][CONFIG_SIZE] = {
-        0,1,0,1,0
+    int rule [RULE_SIZE] = {
+        1,0,0,1,0,1,1,0
     };
+    
+    species population[POPULATION_SIZE];
+    population[0].update[0] = 2;
+    population[0].update[1] = 1;
+    population[0].update[2] = 2;
+    population[0].update[3] = 1;
+    population[0].update[4] = 2;
     
     int i, j;
     for (i = 0; i < POPULATION_SIZE; i++) { // Iterates over each species in the population
+        
+        int configurations [AMOUNT_OF_CONFIGS_TO_TEST][CONFIG_SIZE];
+        for (j = 0; j < CONFIG_SIZE; j++) configurations[0][j] = (j%2 == 0)?1:0;
         
         // Converts the species' array of priority to an ordered array of genes
         gene chromossome[CONFIG_SIZE];
@@ -115,8 +68,10 @@ int main(int argc, char *argv[]) {
         // Computes the fitness for each species
         float amountOfConfigsThatDidConverge = 0;
         for (j = 0; j < AMOUNT_OF_CONFIGS_TO_TEST; j++)
-            amountOfConfigsThatDidConverge += didConverge(configurations[j], chromossome);
+            amountOfConfigsThatDidConverge += didConverge(configurations[j], chromossome, rule);
         population[i].fitness = amountOfConfigsThatDidConverge / AMOUNT_OF_CONFIGS_TO_TEST;
+        
+        
     }
     
     exit(EXIT_SUCCESS);
