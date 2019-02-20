@@ -35,13 +35,13 @@ int didConverge(int config[CONFIG_SIZE], gene chromossome[], int *rule) {
         int j;
         for (j = 0; j < CONFIG_SIZE; j++) aux[j] = config[j];
         for (j = 0; j < CONFIG_SIZE; j++) { //Iterates over the configuration
-            int state[(2*NUMBER_OF_NEIGHBOURS)+1];
             int k, l = 0;
+            int state[(2*NUMBER_OF_NEIGHBOURS)+1] = {0};
             for (k = j-NUMBER_OF_NEIGHBOURS; k <= j+NUMBER_OF_NEIGHBOURS ; k++) {
                 if (k >= 0)
                     if (k < CONFIG_SIZE) state[l] = config[k];
                     else state[l] = config[k-CONFIG_SIZE];
-                    else state[l] = config[CONFIG_SIZE+k];
+                else state[l] = config[CONFIG_SIZE+k];
                 l++;
             }
             aux[j] = rule[binToInt(state)];

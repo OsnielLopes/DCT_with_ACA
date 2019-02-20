@@ -15,14 +15,14 @@ void quicksort(gene chromossome[], int l, int r) {
     if (l >= r) return;
     
     int pivot = chromossome[r].priority;
-    int slipt = l;
+    int split = l;
     
     for (int i = l; i <= r; i++)
         if (chromossome[i].priority <= pivot) {
-            swap(&chromossome[slipt], &chromossome[i]);
-            slipt++;
+            swap(&chromossome[split], &chromossome[i]);
+            split++;
         }
     
-    quicksort(chromossome, l, slipt-2);
-    quicksort(chromossome, slipt, r);
+    quicksort(chromossome, l, split-2);
+    quicksort(chromossome, split, r);
 }
