@@ -64,7 +64,7 @@ void calculateFitness(species population[], int rule[], int configurations[][CON
             chromossome[j].priority = population[i].update[j];
         }
         quicksort(chromossome, 0, CONFIG_SIZE-1); 
-        
+        print(chromossome, 11);
         // Computes the fitness for each species
         float amountOfConfigsThatDidConverge = 0;
         for (j = 0; j < AMOUNT_OF_CONFIGS_TO_TEST; j++){
@@ -85,7 +85,7 @@ void selectionWithOffsprings(species population[POPULATION_SIZE*2], int rule[], 
     
     species aux [POPULATION_SIZE];
     for (i = 0; i<POPULATION_SIZE; i++) {
-        float randomFitness = totalFitness*(float)random()/(float)RAND_MAX;
+        float randomFitness = totalFitness*(float)rand()/(float)RAND_MAX;
         int selectedIndex = 0;
         float deltaFitness = population[selectedIndex].fitness;
         while (randomFitness > deltaFitness) {
@@ -117,7 +117,7 @@ void crossover(species population[POPULATION_SIZE], int rule[], int configuratio
         int crossoverPoint = rand() % CONFIG_SIZE;
         int k = 0;
         do {
-            k = random()%POPULATION_SIZE;
+            k = rand()%POPULATION_SIZE;
         } while (k==i);
         // New offspring
         for (j = 0; j<crossoverPoint; j++) offsprings[offspringIndex].update[j] = population[i].update[j]; // First half
@@ -176,15 +176,15 @@ int main(int argc, char *argv[]) {
     
     srand((unsigned int)time(NULL));
     
-    int rule [RULE_SIZE] = {1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 0, 0, 1, 1, 0, 0, 1, 1, 0, 0, 1, 1, 1, 1, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 1, 1, 1, 0, 1, 0, 0, 0, 1, 1, 1, 1, 1, 1, 0, 1, 0, 1, 1, 1, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 0, 1, 1, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 1, 0, 0, 0, 1, 0, 1, 0, 0, 0};
-    
+    //int rule [RULE_SIZE] = {1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 0, 0, 1, 1, 0, 0, 1, 1, 0, 0, 1, 1, 1, 1, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 1, 1, 1, 0, 1, 0, 0, 0, 1, 1, 1, 1, 1, 1, 0, 1, 0, 1, 1, 1, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 0, 1, 1, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 1, 0, 0, 0, 1, 0, 1, 0, 0, 0};
+    int rule[8] = {1,0,1,1,1,1,1,1};
     species population[POPULATION_SIZE];
     int i, j, configurations [AMOUNT_OF_CONFIGS_TO_TEST][CONFIG_SIZE];
     
     for (i = 0; i < POPULATION_SIZE; i++)
         for (j = 0; j < CONFIG_SIZE; j++) population[i].update[j] = 0;
 
-    mutation(population, 10);
+    mutation(population, 20);
     
     for (i = 0; i < AMOUNT_OF_CONFIGS_TO_TEST; i++)
         for (j = 0; j < CONFIG_SIZE; j++) configurations[i][j] = rand() % 2;

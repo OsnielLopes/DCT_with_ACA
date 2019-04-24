@@ -8,7 +8,7 @@
 
 #include <math.h>
 
-#define DELTA_T 200
+#define DELTA_T 400
 #define NUMBER_OF_NEIGHBOURS 1
 
 int binToInt(int *binary) {
@@ -44,11 +44,12 @@ int didConverge(int config[CONFIG_SIZE], gene chromossome[], int *rule) {
                 else state[l] = config[CONFIG_SIZE+k];
                 l++;
             }
-            aux[j] = rule[binToInt(state)];
+            int index = binToInt(state);
+            aux[chromossome[j].position] = rule[index];
             
             if (j < CONFIG_SIZE - 1)
                 if (chromossome[j].priority != chromossome[j+1].priority) // Verifies if the level of priority will change
-                    for (k = 0; k < CONFIG_SIZE; k++) config[k] = aux[k]; // If so, copies aux into config
+                for (k = 0; k < CONFIG_SIZE; k++) config[k] = aux[k]; // If so, copies aux into config
             
         }
         
@@ -66,3 +67,4 @@ int didConverge(int config[CONFIG_SIZE], gene chromossome[], int *rule) {
     }
     return 0;
 }
+
