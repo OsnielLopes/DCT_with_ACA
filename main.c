@@ -25,7 +25,7 @@ void prints(species specie){
 
 void selection(species population[]){
     
-    printf("Starting Selection\n");
+    //printf("-----------Starting Selection-----------\n");
     
     //Finds the total fitness
     float totalFitness = 0.0;
@@ -64,7 +64,7 @@ void calculateFitness(species population[], int rule[], int configurations[][CON
             chromossome[j].priority = population[i].update[j];
         }
         quicksort(chromossome, 0, CONFIG_SIZE-1); 
-        print(chromossome, 11);
+        //print(chromossome, 11);
         // Computes the fitness for each species
         float amountOfConfigsThatDidConverge = 0;
         for (j = 0; j < AMOUNT_OF_CONFIGS_TO_TEST; j++){
@@ -73,7 +73,7 @@ void calculateFitness(species population[], int rule[], int configurations[][CON
             amountOfConfigsThatDidConverge += didConverge(configSample, chromossome, rule);
         }
         population[i].fitness = amountOfConfigsThatDidConverge / AMOUNT_OF_CONFIGS_TO_TEST;
-        printf("specime %d - fitness: %f\n", i, amountOfConfigsThatDidConverge / AMOUNT_OF_CONFIGS_TO_TEST);
+        //printf("specime %d - fitness: %f\n", i, amountOfConfigsThatDidConverge / AMOUNT_OF_CONFIGS_TO_TEST);
     }
 }
 
@@ -106,7 +106,7 @@ void selectionWithOffsprings(species population[POPULATION_SIZE*2], int rule[], 
 
 void crossover(species population[POPULATION_SIZE], int rule[], int configurations[][CONFIG_SIZE]){
     
-    printf("Starting Crossover\n");
+    //printf("-----------Starting Crossover-----------\n");
     
     int i, j, offspringIndex = 0;
     
@@ -160,7 +160,7 @@ void crossover(species population[POPULATION_SIZE], int rule[], int configuratio
 }
 
 void mutation(species population[], int factor){
-    printf("Starting Mutation\n");
+    //printf("-----------Starting Mutation-----------\n");
     int i, j;
     for (i = 0; i < POPULATION_SIZE; i++)
         for (j = 0; j < CONFIG_SIZE; j++) {
@@ -175,16 +175,44 @@ void mutation(species population[], int factor){
 int main(int argc, char *argv[]) {
     
     srand((unsigned int)time(NULL));
-    
-    //int rule [RULE_SIZE] = {1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 0, 0, 1, 1, 0, 0, 1, 1, 0, 0, 1, 1, 1, 1, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 1, 1, 1, 0, 1, 0, 0, 0, 1, 1, 1, 1, 1, 1, 0, 1, 0, 1, 1, 1, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 0, 1, 1, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 1, 0, 0, 0, 1, 0, 1, 0, 0, 0};
-    int rule[8] = {1,0,1,1,1,1,1,1};
+
+    // REGRA 40
+    //337607298446901146542393000444934784552
+    // 48,75
+    int rule [RULE_SIZE] = {1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 0, 0, 1, 1, 0, 0, 1, 1, 0, 0, 1, 1, 1, 1, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 1, 1, 1, 0, 1, 0, 0, 0, 1, 1, 1, 1, 1, 1, 0, 1, 0, 1, 1, 1, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 0, 1, 1, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 1, 0, 0, 0, 1, 0, 1, 0, 0, 0};
+    //int rule[8] = {0,0,0,1,0,1,0,0}; //51,75
+    //int rule[8] = {0,0,1,0,1,0,0,0}; //20,15
+    //int rule[8] = {1,1,1,1,1,1,0,1}; //49,60
+    //int rule[8] = {1,0,1,1,1,1,1,1}; //50,70
+
+    //Regra 192
+    //int rule[8] = {1,1,0,0,0,0,0,0}; //07,10
+    //int rule[8] = {0,0,0,0,0,0,1,1}; //49,75
+
+    //Regra 8
+    //330728449507452567001937980667306607112
+    //int rule[8] = {0,0,0,0,1,0,0,0}; //49,95
+    //int rule[8] = {0,0,0,1,0,0,0,0}; //50,25
+
+    //Regra 64
+    //330811546539578815889820414913850559040
+    //int rule[8] = {0,1,0,0,0,0,0,0}; //05,60
+    //int rule[8] = {0,0,0,0,0,0,1,0}; //49,92
+
+    //Regra 182
+    //10111000
+
+    int aux[RULE_SIZE], i, j;
+    for (i = RULE_SIZE - 1, j = 0; i >= 0; i--, j++) aux[j] = rule[i];
+    for (i = 0; i < RULE_SIZE; i++) rule[i] = aux[i];
+
     species population[POPULATION_SIZE];
-    int i, j, configurations [AMOUNT_OF_CONFIGS_TO_TEST][CONFIG_SIZE];
+    int configurations [AMOUNT_OF_CONFIGS_TO_TEST][CONFIG_SIZE];
     
     for (i = 0; i < POPULATION_SIZE; i++)
         for (j = 0; j < CONFIG_SIZE; j++) population[i].update[j] = 0;
 
-    mutation(population, 20);
+    mutation(population, 10);
     
     for (i = 0; i < AMOUNT_OF_CONFIGS_TO_TEST; i++)
         for (j = 0; j < CONFIG_SIZE; j++) configurations[i][j] = rand() % 2;
@@ -193,11 +221,23 @@ int main(int argc, char *argv[]) {
     
     i = 0;
     while (i<100) {
-        printf("AGE %d\n", i);
+        //for (int k = 0; k < AMOUNT_OF_CONFIGS_TO_TEST; k++)
+        //for (j = 0; j < CONFIG_SIZE; j++) configurations[k][j] = rand() % 2;
+        printf("-----------AGE %d-----------\n", i);
+
         selection(population);
         crossover(population, rule, configurations);
         mutation(population, 1);
         calculateFitness(population, rule, configurations);
+
+        float meanFitness = 0, maxFitness = 0;
+        for (int j=0; j<POPULATION_SIZE; j++){
+            meanFitness += population[j].fitness;
+            if (population[j].fitness > maxFitness) maxFitness = population[j].fitness;
+        }
+        meanFitness /= POPULATION_SIZE;
+        printf("mean fitness: %.2f%%\n", meanFitness*100);
+        printf("max fitness:  %.2f%%\n", maxFitness*100);
         i++;
     }
     

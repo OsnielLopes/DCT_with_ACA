@@ -8,8 +8,8 @@
 
 #include <math.h>
 
-#define DELTA_T 400
-#define NUMBER_OF_NEIGHBOURS 1
+#define DELTA_T 84
+#define NUMBER_OF_NEIGHBOURS 3
 
 int binToInt(int *binary) {
     int i = 0, sum = 0, j = 0;
@@ -21,8 +21,8 @@ int binToInt(int *binary) {
 }
 
 int didConverge(int config[CONFIG_SIZE], gene chromossome[], int *rule) {
-    
-    int i = 0;
+    if (DELTA_T<2*CONFIG_SIZE) printf("DT too small!\n");
+    int i = 0, didConvergeOnce = 0;
     
     int amountOfZero = 0, amountOfOne = 0;
     for (i = 0; i < CONFIG_SIZE; i++)
@@ -48,8 +48,9 @@ int didConverge(int config[CONFIG_SIZE], gene chromossome[], int *rule) {
             aux[chromossome[j].position] = rule[index];
             
             if (j < CONFIG_SIZE - 1)
-                if (chromossome[j].priority != chromossome[j+1].priority) // Verifies if the level of priority will change
+            if (chromossome[j].priority != chromossome[j+1].priority){ // Verifies if the level of priority will change
                 for (k = 0; k < CONFIG_SIZE; k++) config[k] = aux[k]; // If so, copies aux into config
+            }
             
         }
         
@@ -62,8 +63,13 @@ int didConverge(int config[CONFIG_SIZE], gene chromossome[], int *rule) {
             if (config[j] == 0) amountOfZero++;
             else amountOfOne++;
         
-        if (amountOfOne == CONFIG_SIZE) return initialDensity == 1;
-        else if (amountOfZero == CONFIG_SIZE) return initialDensity == 0;
+        if ((amountOfOne == CONFIG_SIZE)||(amountOfZero==CONFIG_SIZE)){
+            int currentDensity = (amountOfZero > amountOfOne) ? 0 : 1;
+            if (currentDensity == initialDensity){
+                if (!didConvergeOnce) didConvergeOnce = 1;
+                else return 1;
+            } else didConvergeOnce = 0;
+        }
     }
     return 0;
 }
